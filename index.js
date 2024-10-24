@@ -54,7 +54,6 @@ app.put('/person/:id', (req, res) => {
     }
     const person = persons.find((person) => person.id === id)
     if (!person) {
-        // return res.status(404).send('Person not found')
         return res.status(404).json({ message: 'Person not found' })
     }
     const updatedPerson = req.body

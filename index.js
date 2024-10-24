@@ -21,8 +21,8 @@ app.get('/person', (req, res) => {
     // console.log('get all persons')
     return res.status(200).json({ persons })
 })
-app.get('/person/:id', (req, res) => {
-    const id = req.params.id
+app.get('/person/:personId', (req, res) => {
+    const id = req.params.personId
     if (!id) {
         return res.status(400).json({ message: 'Id is required' })
     }
@@ -47,8 +47,8 @@ app.post('/person', (req, res) => {
     return res.status(201).json({ person })
 })
 
-app.put('/person/:id', (req, res) => {
-    const id = req.params.id
+app.put('/person/:personId', (req, res) => {
+    const id = req.params.personId
     if (!id) {
         return res.status(400).json({ message: 'Id is required' })
     }
@@ -69,8 +69,8 @@ app.put('/person/:id', (req, res) => {
     return res.status(200).json({ person })
 })
 
-app.delete('/person/:id', (req, res) => {
-    const id = req.params.id
+app.delete('/person/:personId', (req, res) => {
+    const id = req.params.personId
     if (!id) {
         return res.status(400).json({ message: 'Id is required' })
     }
@@ -84,6 +84,11 @@ app.delete('/person/:id', (req, res) => {
 
 app.use((req, res) => {
     res.status(404).json({ message: 'Not Found' })
+})
+
+app.use((err, req, res, next) => {
+    console.error(err.message)
+    res.status(500).json({ message: 'Internal Server Error' })
 })
 
 if (require.main === module) {

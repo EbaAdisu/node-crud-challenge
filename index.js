@@ -19,42 +19,43 @@ app.set('db', persons)
 
 app.get('/person', (req, res) => {
     // console.log('get all persons')
-    return res.status(200).json(persons)
+    return res.status(200).json({ persons })
 })
 app.get('/person/:id', (req, res) => {
     const id = req.params.id
     if (!id) {
-        return res.status(400).send('Id is required')
+        return res.status(400).json({ message: 'Id is required' })
     }
     const person = persons.find((person) => person.id === id)
     if (!person) {
-        return res.status(404).send('Person not found')
+        return res.status(404).json({ message: 'Person not found' })
     }
-    return res.status(200).json(person)
+    return res.status(200).json({ person })
 })
 
 app.post('/person', (req, res) => {
     const person = req.body
     // console.log('person', person)
     if (!person.name || !person.age) {
-        res.status(400).send('Name and age are required')
+        return res.status(400).json({ message: 'Name and age are required' })
     }
     person.id = persons.length
         ? String(Number(persons[persons.length - 1].id) + 1)
         : '1'
     person.hobbies = person.hobbies ? person.hobbies : []
     persons.push(person)
-    return res.status(201).json(person)
+    return res.status(201).json({ person })
 })
 
 app.put('/person/:id', (req, res) => {
     const id = req.params.id
     if (!id) {
-        return res.status(400).send('Id is required')
+        return res.status(400).json({ message: 'Id is required' })
     }
     const person = persons.find((person) => person.id === id)
     if (!person) {
-        return res.status(404).send('Person not found')
+        // return res.status(404).send('Person not found')
+        return res.status(404).json({ message: 'Person not found' })
     }
     const updatedPerson = req.body
     if (updatedPerson.name) {
@@ -66,24 +67,24 @@ app.put('/person/:id', (req, res) => {
     if (updatedPerson.hobbies) {
         person.hobbies = updatedPerson.hobbies
     }
-    return res.status(200).json(person)
+    return res.status(200).json({ person })
 })
 
 app.delete('/person/:id', (req, res) => {
     const id = req.params.id
     if (!id) {
-        return res.status(400).send('Id is required')
+        return res.status(400).json({ message: 'Id is required' })
     }
     const personIndex = persons.findIndex((person) => person.id === id)
     if (personIndex === -1) {
-        return res.status(404).send('Person not found')
+        return res.status(404).json({ message: 'Person not found' })
     }
     persons.splice(personIndex, 1)
     return res.status(204).send()
 })
 
 app.use((req, res) => {
-    res.status(404).send('Not Found')
+    res.status(404).json({ message: 'Not Found' })
 })
 
 if (require.main === module) {
